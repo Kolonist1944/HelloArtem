@@ -2,6 +2,7 @@ package com.vsrstudio.helloartem.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,8 +12,10 @@ import android.widget.Toast;
 import com.vsrstudio.helloartem.R;
 import com.vsrstudio.helloartem.adapters.CountriesAdapter;
 
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
+    private SwipeRefreshLayout refreshLayout;
 
     private String[] countriesArray = {
             "Абхазия",
@@ -43,6 +46,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeColors(R.color.red, R.color.green, R.color.blue);
+
         final ListView countriesList = (ListView) findViewById(R.id.countries_list);
 
         final CountriesAdapter adapter = new CountriesAdapter(this, countriesArray);
@@ -55,5 +62,21 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         final TextView text = (TextView) view.findViewById(R.id.country_name);
         final String elementText = String.valueOf(text.getText());
         Toast.makeText(this, elementText, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(MainActivity.this, "Updated", Toast.LENGTH_LONG).show();
+                refreshLayout.setRefreshing(false);
+            }
+        }).run();
     }
 }
