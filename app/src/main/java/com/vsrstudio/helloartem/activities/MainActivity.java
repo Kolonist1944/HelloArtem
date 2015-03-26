@@ -1,82 +1,72 @@
 package com.vsrstudio.helloartem.activities;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vsrstudio.helloartem.R;
-import com.vsrstudio.helloartem.adapters.CountriesAdapter;
+import com.vsrstudio.helloartem.adapters.AnimalsAdapter;
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
-    private SwipeRefreshLayout refreshLayout;
-
-    private String[] countriesArray = {
-            "Абхазия",
-            "Австралийский Союз",
-            "Австрийская Республика",
-            "Азербайджанская Республика",
-            "автономная территория Финляндии",
-            "Республика Албания",
-            "Алжирская Народная Демократическая Республика",
-            "заморская территория Великобритании",
-            "Республика Ангола",
-            "Княжество Андорра",
-            "Антигуа и Барбуда",
-            "Аргентинская Республика",
-            "Республика Армения",
-            "Исламская Республика Афганистан",
-            "Содружество Багамских Островов",
-            "Народная Республика Бангладеш",
-            "Барбадос",
-            "Королевство Бахрейн",
-            "Белиз",
-            "Республика Беларусь",
-            "Бельгия"
+    private final String[] animalNames = {
+            "Медведь",
+            "Бегемот"/*,
+            "Дельфин",
+            "Орел",
+            "Слон",
+            "Лиса",
+            "Геккон",
+            "Хаски",
+            "Колибри",
+            "Божья коровка",
+            "Леопард",
+            "Панда",
+            "Белый медведь",
+            "Щенок",
+            "Тигр",
+            "Кит",
+            "Волк" */
     };
 
+    private final int[] animalPics = {
+            R.drawable.bear,
+            R.drawable.begemoth/*,
+            R.drawable.dolphin,
+            R.drawable.eagle,
+            R.drawable.elephant,
+            R.drawable.fox,
+            R.drawable.gecko,
+            R.drawable.hasky,
+            R.drawable.kolibri,
+            R.drawable.ladybug,
+            R.drawable.leopard,
+            R.drawable.panda,
+            R.drawable.polar_bear,
+            R.drawable.puppy,
+            R.drawable.tiger,
+            R.drawable.whale,
+            R.drawable.wolf */
+    };
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setColorSchemeColors(R.color.red, R.color.green, R.color.blue);
-
-        final ListView countriesList = (ListView) findViewById(R.id.countries_list);
-
-        final CountriesAdapter adapter = new CountriesAdapter(this, countriesArray);
-        countriesList.setAdapter(adapter);
-        countriesList.setOnItemClickListener(this);
+        final ListView animalsList = (ListView) findViewById(R.id.animals_list);
+        animalsList.setAdapter(new AnimalsAdapter(this, animalNames, animalPics));
+        animalsList.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final TextView text = (TextView) view.findViewById(R.id.country_name);
-        final String elementText = String.valueOf(text.getText());
-        Toast.makeText(this, elementText, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRefresh() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(MainActivity.this, "Updated", Toast.LENGTH_LONG).show();
-                refreshLayout.setRefreshing(false);
-            }
-        }).run();
+        Intent intent = new Intent(this, AnimalActivity.class);
+        intent.putExtra("name", animalNames[position]);
+        intent.putExtra("pic", animalPics[position]);
+        startActivity(intent);
     }
 }

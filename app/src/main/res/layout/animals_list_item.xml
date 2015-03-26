@@ -5,20 +5,18 @@
               android:layout_height="match_parent"
               android:padding="16dp">
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/image"
-        android:src="@mipmap/ic_launcher"
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_width="@dimen/animal_photo_size"
+        android:layout_height="@dimen/animal_photo_size"
+        android:id="@+id/animal_pic"
         android:layout_gravity="center_vertical"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/country_name"
-        android:text="Hi!"
+        android:id="@+id/animal_name"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp"/>
+        android:textSize="@dimen/animal_name_size"
+        android:layout_marginLeft="4dp"/>
 
 </LinearLayout>
